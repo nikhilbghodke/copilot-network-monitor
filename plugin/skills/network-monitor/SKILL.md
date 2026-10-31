@@ -5,7 +5,7 @@ description: Set up, update, inspect, change the check interval, or remove the l
 
 # Network monitor
 
-Use the deterministic [Python utility](../../manage.py) bundled with this skill; no model requests
+Use the deterministic Python utility bundled with this plugin; no model requests
 are needed for monitoring. Do not inspect conversations, credentials, or session
 logs.
 
