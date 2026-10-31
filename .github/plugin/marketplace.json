@@ -1,0 +1,14 @@
+{
+  "name": "copilot-network-tools",
+  "owner": {
+    "name": "nikhilbghodke"
+  },
+  "plugins": [
+    {
+      "name": "copilot-network-monitor",
+      "version": "0.2.0",
+      "description": "A lightweight Copilot connection indicator with macOS login startup.",
+      "source": "./plugin"
+    }
+  ]
+}

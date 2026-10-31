@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "copilot-network-monitor",
+  "version": "0.2.0",
+  "description": "A lightweight, colored Copilot connection indicator with macOS login startup and reversible setup.",
+  "author": {
+    "name": "nikhilbghodke",
+    "url": "https://github.com/nikhilbghodke"
+  },
+  "homepage": "https://github.com/nikhilbghodke/copilot-network-monitor",
+  "repository": "https://github.com/nikhilbghodke/copilot-network-monitor",
+  "license": "MIT",
+  "keywords": ["copilot-cli", "connectivity", "statusline", "macos"]
+}

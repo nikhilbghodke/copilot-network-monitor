@@ -1,0 +1,13 @@
+[project]
+name = "copilot-network-monitor"
+version = "0.2.0"
+description = "Local network observations for the native Copilot CLI status line"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["plugin"]
