@@ -1,6 +1,6 @@
 [project]
 name = "copilot-network-monitor"
-version = "0.2.0"
+version = "0.2.1"
 description = "Local network observations for the native Copilot CLI status line"
 requires-python = ">=3.10"
 dependencies = []

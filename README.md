@@ -18,8 +18,10 @@ copilot plugin marketplace add nikhilbghodke/copilot-network-monitor
 copilot plugin install copilot-network-monitor@copilot-network-tools
 ```
 
-Start a new Copilot session, invoke `/network-monitor`, and request setup.
+Start a new Copilot session, invoke
+`/copilot-network-monitor:network-monitor`, and request setup.
 Installing the plugin alone does not change your status bar or start monitoring.
+If the command is unknown in an existing session, run `/restart` first.
 
 Setup starts a per-user macOS LaunchAgent immediately and at future logins. It
 preserves your previous status indicator. No startup command is needed after
@@ -33,9 +35,9 @@ equivalent command is:
 python3 plugin/manage.py setup --endpoint https://api.enterprise.githubcopilot.com/_ping
 ```
 
-In Copilot, the installed `/network-monitor` skill can perform setup, status,
-updates, and removal. If needed, enable the custom item using `/statusline`, or
-restart Copilot to reload its settings.
+In Copilot, the installed `/copilot-network-monitor:network-monitor` skill can
+perform setup, status, interval changes, updates, and removal. If needed, enable
+the custom item using `/statusline`, or restart Copilot to reload its settings.
 
 `plugin/` is the distributable package; `.github/plugin/marketplace.json` is its
 marketplace catalog. For local development, register the checkout with
@@ -44,8 +46,9 @@ Do not distribute `.venv`, local caches, or `previous-statusline.json`.
 
 ## Inspect, update, and remove
 
-Use `/network-monitor` for status, setup after an update, or removal of the
-background service. The Python commands below assume a source checkout:
+Use `/copilot-network-monitor:network-monitor` for status, setup after an update,
+or removal of the background service. The Python commands below assume a source
+checkout:
 
 ```bash
 python3 plugin/manage.py status
@@ -56,12 +59,16 @@ python3 plugin/manage.py setup
 
 # For a remotely installed package:
 copilot plugin update copilot-network-monitor@copilot-network-tools
-# Then use /network-monitor to rerun setup from the updated plugin.
+# Then use /copilot-network-monitor:network-monitor to rerun setup.
 
 # Remove in this order:
 python3 plugin/manage.py remove
 copilot plugin uninstall copilot-network-monitor@copilot-network-tools
 ```
+
+These examples use this repository's `copilot-network-tools` marketplace. If you
+installed from another marketplace, use the marketplace shown by
+`copilot plugin list` in the update and uninstall commands.
 
 Setup is safe to repeat and retains the original status-line backup. Removal
 restores that backup only if the installed status-line configuration has not
@@ -85,8 +92,9 @@ for transport errors or other HTTP statuses, and yellow **Outdated** or
 The duration includes DNS, connection setup, TLS, and the response. It is not
 maximum bandwidth, pure network latency, or a guarantee of model availability.
 
-The sampler checks 25 seconds after each previous check completes, including
-after timeouts. Only HTTP 429 and 5xx back off to 50, 100, 200, then 300 seconds.
+By default, the sampler checks 25 seconds after each previous check completes,
+including after timeouts. Only HTTP 429 and 5xx use exponential backoff from the
+configured interval, capped at 300 seconds (50, 100, 200, then 300 by default).
 The UI reads a cache every second without making network calls. Samples older
 than twice the configured interval, or a heartbeat over ten seconds old, are
 shown as outdated. Requests have a three-second curl deadline and a four-second
@@ -97,10 +105,16 @@ monitor does not store or transmit that input.
 
 ## Configuration and files
 
+Invoke `/copilot-network-monitor:network-monitor` and ask to set the interval,
+for example, "Set my interval to 35 seconds." From a source checkout:
+
 ```bash
-python3 plugin/manage.py setup --interval 30
+python3 plugin/manage.py setup --interval 35
 ```
 
+The interval must be a whole number from 5 to 300 seconds; the default is 25.
+It controls the delay after each check completes, not the one-second status-bar
+refresh. Server errors and rate limits can still cause longer backoff.
 Options are retained on subsequent setup calls unless explicitly overridden.
 Use `COPILOT_HOME` if your CLI settings live outside `~/.copilot`.
 

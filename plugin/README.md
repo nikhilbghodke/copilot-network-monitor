@@ -11,7 +11,9 @@ copilot plugin marketplace add nikhilbghodke/copilot-network-monitor
 copilot plugin install copilot-network-monitor@copilot-network-tools
 ```
 
-Start a new Copilot session, invoke `/network-monitor`, and request setup.
+Start a new Copilot session, invoke
+`/copilot-network-monitor:network-monitor`, and request setup.
+If the command is unknown in an existing session, run `/restart` first.
 Installation alone does not start the service. Or, from this package directory,
 run:
 
@@ -22,8 +24,9 @@ python3 manage.py status
 
 Setup preserves the existing status indicator and starts a per-user LaunchAgent
 immediately and at subsequent logins. Monitoring continues when Copilot is closed.
-It sends a small, unauthenticated HTTPS request every 25 seconds; timeouts keep
-that cadence, while HTTP 429/5xx back off up to five minutes.
+By default, it sends a small, unauthenticated HTTPS request 25 seconds after the
+previous check completes; timeouts keep that cadence, while HTTP 429/5xx back off
+up to five minutes.
 
 The default probe is `https://api.githubcopilot.com/_ping`. Enterprise routing:
 
@@ -31,19 +34,27 @@ The default probe is `https://api.githubcopilot.com/_ping`. Enterprise routing:
 python3 manage.py setup --endpoint https://api.enterprise.githubcopilot.com/_ping
 ```
 
-`--interval 30` changes the interval; setup retains options unless overridden.
+To change the interval, invoke `/copilot-network-monitor:network-monitor` and
+ask "Set my interval to 35 seconds," or run `python3 manage.py setup --interval 35`.
+Allowed values are whole seconds from 5 to 300; the default is 25. Setup retains
+options unless overridden. This changes connectivity checks, not the one-second
+status-bar refresh; HTTP 429/5xx can still cause longer backoff.
 Only connection status, check duration, and sample age are displayed. No traffic
 counters, conversation history, session logs, or model calls are used.
 
 ## Updating and removing
 
-After `copilot plugin update copilot-network-monitor@copilot-network-tools`, rerun setup using
-`/network-monitor` to refresh the service's runtime. Before uninstalling:
+After `copilot plugin update copilot-network-monitor@copilot-network-tools`,
+rerun setup using `/copilot-network-monitor:network-monitor` to refresh the
+service's runtime. Before uninstalling:
 
 ```bash
 python3 manage.py remove
 copilot plugin uninstall copilot-network-monitor@copilot-network-tools
 ```
+
+If installed from another marketplace, use the marketplace shown by
+`copilot plugin list` instead of `copilot-network-tools` in these commands.
 
 Plugin disable/uninstall alone does not stop the independent login service.
 Removal preserves newer status-line edits and unrelated settings.

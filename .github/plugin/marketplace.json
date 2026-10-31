@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "copilot-network-monitor",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "A lightweight Copilot connection indicator with macOS login startup.",
       "source": "./plugin"
     }
